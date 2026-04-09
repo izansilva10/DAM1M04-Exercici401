@@ -6,15 +6,24 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuració Handlebars
+// Configuració Handlebars amb helper 'math'
 app.engine('hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials')
+    partialsDir: path.join(__dirname, 'views/partials'),
+    helpers: {
+        math: (a, op, b) => {
+            a = Number(a);
+            b = Number(b);
+            if (op === '+') return a + b;
+            if (op === '-') return a - b;
+            return a;
+        }
+    }
 }));
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));  // <-- IMPORTANT
+app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
