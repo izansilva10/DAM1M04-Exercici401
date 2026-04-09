@@ -1,23 +1,36 @@
 <h2>Llista de productes</h2>
-<table border="1" cellpadding="5" style="border-collapse: collapse;">
+
+<form method="GET" action="/productes" style="margin-bottom: 20px;">
+    <input type="text" name="cerca" placeholder="Cercar per nom o categoria" value="{{cerca}}">
+    <button type="submit">Cercar</button>
+    {{#if cerca}}
+        <a href="/productes">Netejar cerca</a>
+    {{/if}}
+</form>
+
+<table border="1" cellpadding="5">
     <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Categoria</th>
-            <th>Preu</th>
-            <th>Stock</th>
-            <th>Actiu</th>
-        </tr>
+        <tr><th>Nom</th><th>Categoria</th><th>Preu</th><th>Stock</th><th>Actiu</th><th>Accions</th></tr>
     </thead>
     <tbody>
         {{#each products}}
         <tr>
-            <td>{{name}}</td>
-            <td>{{category}}</td>
-            <td>{{price}} €</td>
-            <td>{{stock}}</td>
+            <td>{{name}}</td><td>{{category}}</td><td>{{price}} €</td><td>{{stock}}</td>
             <td>{{#if active}}Sí{{else}}No{{/if}}</td>
+            <td><a href="/producteEditar?id={{id}}">✏️ Editar</a></td>
         </tr>
+        {{else}}
+        <tr><td colspan="6">No hi ha productes</td></tr>
         {{/each}}
     </tbody>
 </table>
+
+<div style="margin-top: 20px;">
+    {{#if teAnterior}}
+        <a href="?pagina={{math pagina "-" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">◀ Anterior</a>
+    {{/if}}
+    Pàgina {{pagina}} de {{totalPagines-1}} (total: {{totalPagines}} pàgines)
+    {{#if teSeguent}}
+        <a href="?pagina={{math pagina "+" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent ▶</a>
+    {{/if}}
+</div>
