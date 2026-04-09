@@ -1,0 +1,82 @@
+<h2>{{titol}}</h2>
+
+<form id="productForm" action="{{action}}" method="POST">
+    <input type="hidden" name="taula" value="productes">
+    {{#if producte.id}}
+        <input type="hidden" name="id" value="{{producte.id}}">
+    {{/if}}
+
+    <div>
+        <label>Nom *</label>
+        <input type="text" name="name" id="name" value="{{producte.name}}" required>
+        <div class="error" id="nameError"></div>
+    </div>
+
+    <div>
+        <label>Categoria *</label>
+        <input type="text" name="category" id="category" value="{{producte.category}}" required>
+        <div class="error" id="categoryError"></div>
+    </div>
+
+    <div>
+        <label>Preu (€) * (>0)</label>
+        <input type="number" step="any" name="price" id="price" value="{{producte.price}}" required>
+        <div class="error" id="priceError"></div>
+    </div>
+
+    <div>
+        <label>Stock (>=0)</label>
+        <input type="number" name="stock" id="stock" value="{{producte.stock}}" required>
+        <div class="error" id="stockError"></div>
+    </div>
+
+    <div>
+        <label>Actiu</label>
+        <select name="active" id="active">
+            <option value="1" {{#if producte.active}}selected{{/if}}>Sí</option>
+            <option value="0" {{#unless producte.active}}selected{{/unless}}>No</option>
+        </select>
+    </div>
+
+    <button type="submit">Guardar</button>
+    <a href="/productes">Cancel·lar</a>
+</form>
+
+<script>
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        let valid = true;
+
+        // Netejar errors
+        document.querySelectorAll('.error').forEach(el => el.innerHTML = '');
+        document.querySelectorAll('input, select').forEach(el => el.style.border = '');
+
+        const name = document.getElementById('name').value.trim();
+        if (name === '' || name.length < 2) {
+            document.getElementById('nameError').innerHTML = 'El nom és obligatori (mínim 2 caràcters)';
+            document.getElementById('name').style.border = '1px solid red';
+            valid = false;
+        }
+
+        const price = parseFloat(document.getElementById('price').value);
+        if (isNaN(price) || price <= 0) {
+            document.getElementById('priceError').innerHTML = 'El preu ha de ser un número major que 0';
+            document.getElementById('price').style.border = '1px solid red';
+            valid = false;
+        }
+
+        const stock = parseInt(document.getElementById('stock').value);
+        if (isNaN(stock) || stock < 0) {
+            document.getElementById('stockError').innerHTML = 'El stock ha de ser un enter >= 0';
+            document.getElementById('stock').style.border = '1px solid red';
+            valid = false;
+        }
+
+        if (!valid) e.preventDefault();
+    });
+</script>
+
+<style>
+    .error { color: red; font-size: 0.8em; margin-top: 4px; }
+    form div { margin-bottom: 15px; }
+    label { display: inline-block; width: 100px; }
+</style>

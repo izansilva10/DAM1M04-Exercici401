@@ -40,4 +40,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Mostrar formulari per afegir producte
+router.get('/afegir', (req, res) => {
+    res.render('products/form', { 
+        producte: null, 
+        action: '/create',
+        titol: 'Afegir producte'
+    });
+});
+
 module.exports = router;

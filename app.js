@@ -31,6 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rutes
 const productsRouter = require('./routes/products');
 app.use('/productes', productsRouter);
+const crudRouter = require('./routes/crud');
+app.use('/', crudRouter);
 
 app.get('/', (req, res) => {
     res.render('dashboard', { titol: 'Dashboard' });
