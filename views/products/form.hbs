@@ -37,7 +37,12 @@
             <option value="0" {{#unless producte.active}}selected{{/unless}}>No</option>
         </select>
     </div>
-
+{{#if producte.id}}
+    <button type="submit" formaction="/delete" formmethod="POST" 
+            onclick="return confirm('Segur que vols eliminar aquest producte?')">
+        Eliminar producte
+    </button>
+{{/if}}
     <button type="submit">Guardar</button>
     <a href="/productes">Cancel·lar</a>
 </form>
