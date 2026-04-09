@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
+// Llistat amb paginació i cerca
 router.get('/', async (req, res) => {
     try {
         const pagina = parseInt(req.query.pagina) || 0;
@@ -30,9 +31,8 @@ router.get('/', async (req, res) => {
             pagina,
             cerca,
             totalPagines,
-            paginaActual: pagina,
-            teSeguent: pagina + 1 < totalPagines,
-            teAnterior: pagina > 0
+            teAnterior: pagina > 0,
+            teSeguent: pagina + 1 < totalPagines
         });
     } catch (error) {
         console.error(error);
@@ -40,19 +40,20 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Mostrar formulari per afegir producte
+// Formulari per afegir
 router.get('/afegir', (req, res) => {
-    res.render('products/form', { 
-        producte: null, 
+    res.render('products/form', {
+        producte: null,
         action: '/create',
         titol: 'Afegir producte'
     });
 });
 
-// Mostrar formulari per editar producte
+// Formulari per editar (segons enunciat: /producteEditar)
 router.get('/producteEditar', async (req, res) => {
     const id = req.query.id;
     if (!id) return res.redirect('/productes');
+
     try {
         const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [id]);
         if (rows.length === 0) return res.redirect('/productes');
@@ -63,7 +64,8 @@ router.get('/producteEditar', async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error carregant producte');
+        res.status(500).send('Error carregant producte per editar');
     }
 });
+
 module.exports = router;

@@ -1,7 +1,7 @@
 <h2>{{titol}}</h2>
 
 <form id="productForm" action="{{action}}" method="POST">
-    <input type="hidden" name="taula" value="productes">
+    <input type="hidden" name="taula" value="products">
     {{#if producte.id}}
         <input type="hidden" name="id" value="{{producte.id}}">
     {{/if}}
@@ -37,15 +37,18 @@
             <option value="0" {{#unless producte.active}}selected{{/unless}}>No</option>
         </select>
     </div>
-{{#if producte.id}}
-    <button type="submit" formaction="/delete" formmethod="POST" 
-            onclick="return confirm('Segur que vols eliminar aquest producte?')">
-        Eliminar producte
-    </button>
-{{/if}}
+
     <button type="submit">Guardar</button>
     <a href="/productes">Cancel·lar</a>
 </form>
+
+{{#if producte.id}}
+    <form action="/delete" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest producte?')" style="margin-top: 20px;">
+        <input type="hidden" name="taula" value="products">
+        <input type="hidden" name="id" value="{{producte.id}}">
+        <button type="submit" style="background-color: red; color: white;">Eliminar producte</button>
+    </form>
+{{/if}}
 
 <script>
     document.getElementById('productForm').addEventListener('submit', function(e) {

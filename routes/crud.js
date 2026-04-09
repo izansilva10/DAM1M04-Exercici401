@@ -5,7 +5,7 @@ const db = require('../db/connection');
 // CREATE
 router.post('/create', async (req, res) => {
     const { taula, name, category, price, stock, active } = req.body;
-    if (taula === 'productes') {
+    if (taula === 'products') {
         await db.query(
             'INSERT INTO products (name, category, price, stock, active) VALUES (?, ?, ?, ?, ?)',
             [name, category, parseFloat(price), parseInt(stock), active === '1' ? 1 : 0]
@@ -19,7 +19,7 @@ router.post('/create', async (req, res) => {
 // UPDATE
 router.post('/update', async (req, res) => {
     const { taula, id, name, category, price, stock, active } = req.body;
-    if (taula === 'productes') {
+    if (taula === 'products') {
         await db.query(
             'UPDATE products SET name=?, category=?, price=?, stock=?, active=? WHERE id=?',
             [name, category, parseFloat(price), parseInt(stock), active === '1' ? 1 : 0, id]
@@ -33,7 +33,7 @@ router.post('/update', async (req, res) => {
 // DELETE
 router.post('/delete', async (req, res) => {
     const { taula, id } = req.body;
-    if (taula === 'productes') {
+    if (taula === 'products') {
         await db.query('DELETE FROM products WHERE id = ?', [id]);
         res.redirect('/productes');
     } else {
