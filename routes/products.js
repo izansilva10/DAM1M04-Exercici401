@@ -50,14 +50,12 @@ router.get('/afegir', (req, res) => {
 });
 
 // Mostrar formulari per editar producte
-router.get('/editar', async (req, res) => {
+router.get('/producteEditar', async (req, res) => {
     const id = req.query.id;
     if (!id) return res.redirect('/productes');
-
     try {
         const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [id]);
         if (rows.length === 0) return res.redirect('/productes');
-        
         res.render('products/form', {
             producte: rows[0],
             action: '/update',
@@ -68,5 +66,4 @@ router.get('/editar', async (req, res) => {
         res.status(500).send('Error carregant producte');
     }
 });
-
 module.exports = router;
