@@ -1,11 +1,12 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Configurar Handlebars
+// Configuració Handlebars
 app.engine('hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main',
@@ -13,18 +14,18 @@ app.engine('hbs', engine({
     partialsDir: path.join(__dirname, 'views/partials')
 }));
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views'));  // <-- IMPORTANT
 
-// Middleware per arxius estàtics
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta principal
+// Rutes
+const productsRouter = require('./routes/products');
+app.use('/productes', productsRouter);
+
 app.get('/', (req, res) => {
     res.render('dashboard', { titol: 'Dashboard' });
 });
-
-const productsRouter = require('./routes/products');
-app.use('/productes', productsRouter);
 
 app.listen(PORT, () => {
     console.log(`Servidor a http://localhost:${PORT}`);

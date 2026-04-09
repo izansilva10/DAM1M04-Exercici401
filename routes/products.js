@@ -5,7 +5,7 @@ const db = require('../db/connection');
 router.get('/', async (req, res) => {
     try {
         const [products] = await db.query('SELECT * FROM products');
-        res.render('products/list', { products });
+        res.render('products/list', { products });  // <-- list minúscula
     } catch (error) {
         console.error(error);
         res.status(500).send('Error carregant productes');

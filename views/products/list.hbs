@@ -1,0 +1,23 @@
+<h2>Llista de productes</h2>
+<table border="1" cellpadding="5" style="border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Categoria</th>
+            <th>Preu</th>
+            <th>Stock</th>
+            <th>Actiu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{category}}</td>
+            <td>{{price}} €</td>
+            <td>{{stock}}</td>
+            <td>{{#if active}}Sí{{else}}No{{/if}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
