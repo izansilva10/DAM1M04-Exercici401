@@ -23,6 +23,9 @@ app.get('/', (req, res) => {
     res.render('dashboard', { titol: 'Dashboard' });
 });
 
+const productsRouter = require('./routes/products');
+app.use('/productes', productsRouter);
+
 app.listen(PORT, () => {
     console.log(`Servidor a http://localhost:${PORT}`);
 });
