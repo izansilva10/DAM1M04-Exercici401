@@ -36,6 +36,8 @@ const productsRouter = require('./routes/products');
 app.use('/productes', productsRouter);
 const crudRouter = require('./routes/crud');
 app.use('/', crudRouter);
+const customersRouter = require('./routes/customers');
+app.use('/clients', customersRouter);
 
 app.get('/', (req, res) => {
     res.render('dashboard', { titol: 'Dashboard' });

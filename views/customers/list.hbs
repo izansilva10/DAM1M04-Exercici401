@@ -1,0 +1,37 @@
+<h2>Llista de clients</h2>
+
+<form method="GET" action="/clients" style="margin-bottom: 20px;">
+    <input type="text" name="cerca" placeholder="Cercar per nom o email" value="{{cerca}}">
+    <button type="submit">Cercar</button>
+    {{#if cerca}}
+        <a href="/clients">Netejar cerca</a>
+    {{/if}}
+</form>
+
+<a href="/clients/afegir" style="margin-bottom: 10px; display: inline-block;">+ Afegir client</a>
+
+<table border="1" cellpadding="5">
+    <thead>
+        <tr><th>Nom</th><th>Email</th><th>Telèfon</th><th>Accions</th></tr>
+    </thead>
+    <tbody>
+        {{#each customers}}
+        <tr>
+            <td>{{name}}</td><td>{{email}}</td><td>{{phone}}</td>
+            <td><a href="/clients/clientEditar?id={{id}}">✏️ Editar</a></td>
+        </tr>
+        {{else}}
+        <tr><td colspan="4">No hi ha clients</td></tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    {{#if teAnterior}}
+        <a href="?pagina={{math pagina "-" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">◀ Anterior</a>
+    {{/if}}
+    Pàgina {{pagina}} de {{math totalPagines 1 "-"}} (total: {{totalPagines}} pàgines)
+    {{#if teSeguent}}
+        <a href="?pagina={{math pagina "+" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent ▶</a>
+    {{/if}}
+</div>

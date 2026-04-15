@@ -1,0 +1,75 @@
+<h2>{{titol}}</h2>
+
+<form id="customerForm" action="{{action}}" method="POST">
+    <input type="hidden" name="taula" value="customers">
+    {{#if customer.id}}
+        <input type="hidden" name="id" value="{{customer.id}}">
+    {{/if}}
+
+    <div>
+        <label>Nom *</label>
+        <input type="text" name="name" id="name" value="{{customer.name}}" required>
+        <div class="error" id="nameError"></div>
+    </div>
+
+    <div>
+        <label>Email *</label>
+        <input type="email" name="email" id="email" value="{{customer.email}}" required>
+        <div class="error" id="emailError"></div>
+    </div>
+
+    <div>
+        <label>Telèfon *</label>
+        <input type="text" name="phone" id="phone" value="{{customer.phone}}" required>
+        <div class="error" id="phoneError"></div>
+    </div>
+
+    <button type="submit">Guardar</button>
+    <a href="/clients">Cancel·lar</a>
+</form>
+
+{{#if customer.id}}
+    <form action="/delete" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest client?')" style="margin-top: 20px;">
+        <input type="hidden" name="taula" value="customers">
+        <input type="hidden" name="id" value="{{customer.id}}">
+        <button type="submit" style="background-color: red; color: white;">Eliminar client</button>
+    </form>
+{{/if}}
+
+<script>
+    document.getElementById('customerForm').addEventListener('submit', function(e) {
+        let valid = true;
+        document.querySelectorAll('.error').forEach(el => el.innerHTML = '');
+        document.querySelectorAll('input').forEach(el => el.style.border = '');
+
+        const name = document.getElementById('name').value.trim();
+        if (name === '' || name.length < 2) {
+            document.getElementById('nameError').innerHTML = 'El nom és obligatori (mínim 2 caràcters)';
+            document.getElementById('name').style.border = '1px solid red';
+            valid = false;
+        }
+
+        const email = document.getElementById('email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === '' || !emailRegex.test(email)) {
+            document.getElementById('emailError').innerHTML = 'Email invàlid (ex: nom@domini.com)';
+            document.getElementById('email').style.border = '1px solid red';
+            valid = false;
+        }
+
+        const phone = document.getElementById('phone').value.trim();
+        if (phone === '' || phone.length < 9) {
+            document.getElementById('phoneError').innerHTML = 'Telèfon obligatori (mínim 9 dígits)';
+            document.getElementById('phone').style.border = '1px solid red';
+            valid = false;
+        }
+
+        if (!valid) e.preventDefault();
+    });
+</script>
+
+<style>
+    .error { color: red; font-size: 0.8em; margin-top: 4px; }
+    form div { margin-bottom: 15px; }
+    label { display: inline-block; width: 100px; }
+</style>
