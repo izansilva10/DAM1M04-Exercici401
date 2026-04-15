@@ -40,3 +40,9 @@
     {{/if}}
 </div>
 <td class="stock-cell {{stockColor stock}}">{{stock}}</td>
+<script>
+    document.getElementById('toggleStockColorsLocal')?.addEventListener('click', function() {
+        document.body.classList.toggle('show-stock-colors');
+        this.textContent = document.body.classList.contains('show-stock-colors') ? 'Desactivar colors stock' : 'Activar colors stock';
+    });
+</script>
