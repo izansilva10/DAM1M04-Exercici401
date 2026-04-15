@@ -38,7 +38,8 @@ const crudRouter = require('./routes/crud');
 app.use('/', crudRouter);
 const customersRouter = require('./routes/customers');
 app.use('/clients', customersRouter);
-
+const salesRouter = require('./routes/sales');
+app.use('/vendes', salesRouter);
 app.get('/', (req, res) => {
     res.render('dashboard', { titol: 'Dashboard' });
 });

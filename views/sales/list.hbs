@@ -1,0 +1,38 @@
+<h2>Llista de vendes</h2>
+
+<form method="GET" action="/vendes" style="margin-bottom: 20px;">
+    <input type="text" name="cerca" placeholder="Cercar per nom de client" value="{{cerca}}">
+    <button type="submit">Cercar</button>
+    {{#if cerca}}
+        <a href="/vendes">Netejar cerca</a>
+    {{/if}}
+</form>
+
+<a href="/vendes/crear" style="margin-bottom: 10px; display: inline-block;">+ Nova venda</a>
+
+<table border="1" cellpadding="5">
+    <thead>
+        <tr><th>ID</th><th>Data</th><th>Client</th><th>Total</th><th>Mètode pagament</th><th>Accions</th></tr>
+    </thead>
+    <tbody>
+        {{#each sales}}
+        <tr>
+            <td>{{id}}</td><td>{{formatDate sale_date}}</td><td>{{customer_name}}</td><td>{{total}} €</td>
+            <td>{{payment_method}}</td>
+            <td><a href="/vendes/veure/{{id}}">👁️ Veure</a></td>
+        </tr>
+        {{else}}
+        <tr><td colspan="6">No hi ha vendes</td></tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    {{#if teAnterior}}
+        <a href="?pagina={{math pagina "-" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">◀ Anterior</a>
+    {{/if}}
+    Pàgina {{pagina}} de {{math totalPagines 1 "-"}} (total: {{totalPagines}} pàgines)
+    {{#if teSeguent}}
+        <a href="?pagina={{math pagina "+" 1}}{{#if cerca}}&cerca={{cerca}}{{/if}}">Següent ▶</a>
+    {{/if}}
+</div>

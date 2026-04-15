@@ -1,0 +1,137 @@
+<h2>Nova venda</h2>
+
+<form id="saleForm" action="/vendes/guardar" method="POST">
+    <div>
+        <label>Client:</label>
+        <select name="customer_id" required>
+            <option value="">Selecciona client</option>
+            {{#each customers}}
+                <option value="{{id}}">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div>
+        <label>Mètode de pagament:</label>
+        <select name="payment_method">
+            <option value="Efectiu">Efectiu</option>
+            <option value="Targeta">Targeta</option>
+            <option value="Transferència">Transferència</option>
+        </select>
+    </div>
+
+    <hr>
+    <h3>Productes</h3>
+    <table id="itemsTable" border="1">
+        <thead>
+            <tr><th>Producte</th><th>Preu unitari</th><th>Quantitat</th><th>Stock disponible</th><th>Subtotal</th><th></th></tr>
+        </thead>
+        <tbody id="itemsBody">
+            <tr class="item-row">
+                <td>
+                    <select name="product_id[]" class="product-select" required>
+                        <option value="">Selecciona</option>
+                        {{#each products}}
+                            <option value="{{id}}" data-price="{{price}}" data-stock="{{stock}}">{{name}} (stock: {{stock}})</option>
+                        {{/each}}
+                    </select>
+                </td>
+                <td><input type="number" step="any" name="unit_price[]" class="unit-price" readonly style="background:#eee;"></td>
+                <td><input type="number" name="qty[]" class="qty" min="1" value="1" required></td>
+                <td class="stock-display"></td>
+                <td><input type="number" step="any" name="line_total[]" class="line-total" readonly></td>
+                <td><button type="button" class="remove-row">❌</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" id="addRow">+ Afegir producte</button>
+
+    <div>
+        <h3>Total: <span id="totalAmount">0.00</span> €</h3>
+        <input type="hidden" name="total" id="totalHidden">
+    </div>
+
+    <button type="submit">Finalitzar venda</button>
+    <a href="/vendes">Cancel·lar</a>
+</form>
+
+<script>
+    function updateRow(row) {
+        const select = row.querySelector('.product-select');
+        const selected = select.options[select.selectedIndex];
+        const price = selected.getAttribute('data-price');
+        const stock = selected.getAttribute('data-stock');
+        const qtyInput = row.querySelector('.qty');
+        const qty = parseInt(qtyInput.value) || 0;
+        const unitPriceInput = row.querySelector('.unit-price');
+        const lineTotalInput = row.querySelector('.line-total');
+        const stockDisplay = row.querySelector('.stock-display');
+
+        if (price && qty > 0) {
+            unitPriceInput.value = parseFloat(price).toFixed(2);
+            const subtotal = parseFloat(price) * qty;
+            lineTotalInput.value = subtotal.toFixed(2);
+            stockDisplay.innerText = stock;
+            if (qty > parseInt(stock)) {
+                qtyInput.style.border = '1px solid red';
+                alert('Quantitat superior al stock disponible');
+                valid = false;
+            } else {
+                qtyInput.style.border = '';
+            }
+        } else {
+            unitPriceInput.value = '';
+            lineTotalInput.value = '';
+            stockDisplay.innerText = '';
+        }
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.line-total').forEach(input => {
+            let val = parseFloat(input.value);
+            if (!isNaN(val)) total += val;
+        });
+        document.getElementById('totalAmount').innerText = total.toFixed(2);
+        document.getElementById('totalHidden').value = total.toFixed(2);
+    }
+
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('product-select') || e.target.classList.contains('qty')) {
+            const row = e.target.closest('.item-row');
+            if (row) updateRow(row);
+        }
+    });
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('qty')) {
+            const row = e.target.closest('.item-row');
+            if (row) updateRow(row);
+        }
+    });
+
+    document.getElementById('addRow').addEventListener('click', () => {
+        const tbody = document.getElementById('itemsBody');
+        const originalRow = document.querySelector('.item-row');
+        const newRow = originalRow.cloneNode(true);
+        newRow.querySelectorAll('input, select').forEach(el => el.value = '');
+        tbody.appendChild(newRow);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-row')) {
+            const row = e.target.closest('.item-row');
+            if (document.querySelectorAll('.item-row').length > 1) {
+                row.remove();
+                updateTotal();
+            } else {
+                alert('Ha d\'haver almenys un producte');
+            }
+        }
+    });
+</script>
+
+<style>
+    .error { color: red; }
+    table td { padding: 5px; }
+</style>
