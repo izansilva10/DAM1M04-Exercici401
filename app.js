@@ -47,3 +47,23 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor a http://localhost:${PORT}`);
 });
+app.engine('hbs', engine({
+    extname: '.hbs',
+    defaultLayout: 'main',
+    layoutsDir: path.join(__dirname, 'views/layouts'),
+    partialsDir: path.join(__dirname, 'views/partials'),
+    helpers: {
+        math: (a, op, b) => {
+            a = Number(a);
+            b = Number(b);
+            if (op === '+') return a + b;
+            if (op === '-') return a - b;
+            return a;
+        },
+        formatDate: (date) => {
+            if (!date) return '';
+            const d = new Date(date);
+            return d.toLocaleDateString('ca-ES');
+        }
+    }
+}));
