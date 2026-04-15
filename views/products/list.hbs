@@ -12,19 +12,22 @@
 
 <table border="1" cellpadding="5">
     <thead>
-        <tr><th>Nom</th><th>Categoria</th><th>Preu</th><th>Stock</th><th>Actiu</th><th>Accions</th></tr>
-    </thead>
-    <tbody>
-        {{#each products}}
-        <tr>
-            <td>{{name}}</td><td>{{category}}</td><td>{{price}} €</td><td>{{stock}}</td>
-            <td>{{#if active}}Sí{{else}}No{{/if}}</td>
-            <td><a href="/productes/producteEditar?id={{id}}">Editar</a></td>
-        </tr>
-        {{else}}
-        <tr><td colspan="6">No hi ha productes</td></tr>
-        {{/each}}
-    </tbody>
+    <tr><th>Nom</th><th>Categoria</th><th>Preu</th><th>Stock</th><th>Actiu</th><th>Accions</th></tr>
+</thead>
+<tbody>
+    {{#each products}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{category}}</td>
+        <td>{{price}} €</td>
+        <td class="stock-cell {{stockColor stock}}">{{stock}}</td>
+        <td>{{#if active}}Sí{{else}}No{{/if}}</td>
+        <td><a href="/productes/producteEditar?id={{id}}">Editar</a></td>
+    </tr>
+    {{else}}
+    <tr><td colspan="6">No hi ha productes</td></tr>
+    {{/each}}
+</tbody>
 </table>
 
 <div style="margin-top: 20px;">

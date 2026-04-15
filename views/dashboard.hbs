@@ -1,2 +1,125 @@
 <h2>Panell de control</h2>
-<p>Benvingut al MiniERP.</p>
+
+<div class="tabs">
+    <button id="tabKpi" class="tab-btn active">📊 KPI</button>
+    <button id="tabLlistats" class="tab-btn">📋 Llistats</button>
+</div>
+
+<div id="kpiContent" class="tab-content active">
+    <div class="kpi-cards">
+        <div class="card">
+            <h3>Vendes d'avui</h3>
+            <p class="kpi-number">{{kpi.vendesAvui}} €</p>
+        </div>
+        <div class="card">
+            <h3>Vendes del mes</h3>
+            <p class="kpi-number">{{kpi.vendesMes}} €</p>
+        </div>
+        <div class="card">
+            <h3>Comandes avui</h3>
+            <p class="kpi-number">{{kpi.comandesAvui}}</p>
+        </div>
+        <div class="card">
+            <h3>Comandes del mes</h3>
+            <p class="kpi-number">{{kpi.comandesMes}}</p>
+        </div>
+    </div>
+    <div class="stock-baix">
+        <h3>Productes amb stock baix (≤5)</h3>
+        {{#if kpi.stockBaix.length}}
+            <ul>
+            {{#each kpi.stockBaix}}
+                <li>{{name}} - Stock: {{stock}}</li>
+            {{/each}}
+            </ul>
+        {{else}}
+            <p>No hi ha productes amb stock baix.</p>
+        {{/if}}
+    </div>
+    <button id="toggleCompacte" class="toggle-btn">Mode compacte</button>
+</div>
+
+<div id="llistatsContent" class="tab-content">
+    <div class="llistat">
+        <h3>Últimes 5 vendes</h3>
+        <table border="1">
+            <thead><tr><th>Data</th><th>Client</th><th>Total</th></tr></thead>
+            <tbody>
+                {{#each ultimesVendes}}
+                <tr><td>{{formatDate sale_date}}</td><td>{{client_name}}</td><td>{{total}} €</td></tr>
+                {{else}}
+                <tr><td colspan="3">No hi ha vendes</td></tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="llistat">
+        <h3>Top 5 productes més venuts</h3>
+        <table border="1">
+            <thead><tr><th>Producte</th><th>Unitats venudes</th></tr></thead>
+            <tbody>
+                {{#each topProductes}}
+                <tr><td>{{name}}</td><td>{{total_venut}}</td></tr>
+                {{else}}
+                <tr><td colspan="2">No hi ha dades</td></tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <button id="toggleStockColors" class="toggle-btn">Activar colors stock</button>
+</div>
+
+<style>
+.tabs { margin-bottom: 20px; }
+.tab-btn { padding: 10px 20px; cursor: pointer; background: #ccc; border: none; margin-right: 5px; }
+.tab-btn.active { background: #007bff; color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.kpi-cards { display: flex; gap: 20px; flex-wrap: wrap; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; min-width: 150px; text-align: center; }
+.kpi-number { font-size: 2em; font-weight: bold; margin: 10px 0; }
+.stock-baix { margin-top: 30px; }
+.llistat { margin-bottom: 30px; }
+.toggle-btn { margin-top: 20px; background-color: #28a745; color: white; border: none; padding: 8px 16px; cursor: pointer; border-radius: 4px; }
+.compacte .card p, .compacte .stock-baix ul { font-size: 0.8em; }
+.compacte .kpi-number { font-size: 1.5em; }
+</style>
+
+<script>
+    // Pestanyes
+    const tabKpi = document.getElementById('tabKpi');
+    const tabLlistats = document.getElementById('tabLlistats');
+    const kpiContent = document.getElementById('kpiContent');
+    const llistatsContent = document.getElementById('llistatsContent');
+    tabKpi.addEventListener('click', () => {
+        tabKpi.classList.add('active');
+        tabLlistats.classList.remove('active');
+        kpiContent.classList.add('active');
+        llistatsContent.classList.remove('active');
+    });
+    tabLlistats.addEventListener('click', () => {
+        tabLlistats.classList.add('active');
+        tabKpi.classList.remove('active');
+        llistatsContent.classList.add('active');
+        kpiContent.classList.remove('active');
+    });
+
+    // Toggle mode compacte (només a KPI)
+    let compacte = false;
+    document.getElementById('toggleCompacte').addEventListener('click', function() {
+        compacte = !compacte;
+        if (compacte) {
+            kpiContent.classList.add('compacte');
+            this.textContent = 'Mode complert';
+        } else {
+            kpiContent.classList.remove('compacte');
+            this.textContent = 'Mode compacte';
+        }
+    });
+
+    // Toggle colors stock (afecta a tot el lloc, però especialment a productes)
+    document.getElementById('toggleStockColors').addEventListener('click', function() {
+        document.body.classList.toggle('show-stock-colors');
+        this.textContent = document.body.classList.contains('show-stock-colors') ? 'Desactivar colors stock' : 'Activar colors stock';
+    });
+</script>
