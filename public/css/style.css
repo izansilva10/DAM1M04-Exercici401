@@ -122,3 +122,9 @@ footer {
 .error {
     color: var(--stock-critical);
 }
+/* Colors de stock per als productes */
+body.stock-colors .stock-ok { color: var(--stock-ok); font-weight: bold; }
+body.stock-colors .stock-low { color: var(--stock-low); font-weight: bold; }
+body.stock-colors .stock-critical { color: var(--stock-critical); font-weight: bold; }
+
+/* Per aplicar aquests colors a les files de la taula de productes, necessitaràs modificar list.hbs per afegir classes segons el stock. De moment deixem el toggle preparat. */
