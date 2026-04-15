@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
-    <title>MiniERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniERP Botiga</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
-        <h1>MiniERP Botiga</h1>
-    </header>
-    <nav>
-        <a href="/">Dashboard</a>
-        <a href="/productes">Productes</a>
-        <a href="/clients">Clients</a>
-        <a href="/vendes">Vendes</a>
-    </nav>
-    <main>
+    {{> header}}
+    {{> menu}}
+    <main class="container">
         {{{body}}}
     </main>
-    <footer>
-        <p>&copy; 2026 - MiniERP</p>
-    </footer>
+    {{> footer}}
+    <script src="/js/theme.js" defer></script>
 </body>
 </html>

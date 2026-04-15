@@ -21,11 +21,15 @@ function loadTheme() {
     }
 }
 
-// Configurar botons
+// Configurar botons quan el DOM estigui llest
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
     
-    document.getElementById('themeLight')?.addEventListener('click', () => setTheme(themes.light));
-    document.getElementById('themeDark')?.addEventListener('click', () => setTheme(themes.dark));
-    document.getElementById('themeHighContrast')?.addEventListener('click', () => setTheme(themes.highContrast));
+    const btnLight = document.getElementById('themeLight');
+    const btnDark = document.getElementById('themeDark');
+    const btnHigh = document.getElementById('themeHighContrast');
+    
+    if (btnLight) btnLight.addEventListener('click', () => setTheme(themes.light));
+    if (btnDark) btnDark.addEventListener('click', () => setTheme(themes.dark));
+    if (btnHigh) btnHigh.addEventListener('click', () => setTheme(themes.highContrast));
 });
